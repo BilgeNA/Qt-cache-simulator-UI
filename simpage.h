@@ -28,11 +28,22 @@ private slots:
     void on_finish_pressed();
 
 private:
+    struct pointodesu {
+    int r;
+    int g;
+    int b;
+    int x;
+    int y;
+    };
     Ui::SimPage *ui;
     QStringList *lines;
-    QList<QVector2D> points;
+    QList<pointodesu> points;
     int var;
     double total;
+    int r;
+    int g;
+    int b;
+    QList<QString> results;
 
 protected:
     void paintEvent(QPaintEvent *e);

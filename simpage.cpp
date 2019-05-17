@@ -39,9 +39,9 @@ void SimPage::paintEvent(QPaintEvent *e)
 
     if(points.length() != 0){
         for (var = 0; var < points.length(); ++var) {
-            pointpen.setColor(QColor(random()*1000%255,random()*1000%255,random()*1000%255,255));
+            pointpen.setColor(QColor(points.at(var).r,points.at(var).g,points.at(var).b,255));
             painter.setPen(pointpen);
-            painter.drawPoint(points.at(var).x(), points.at(var).y());
+            painter.drawPoint(points.at(var).x, points.at(var).y);
         }
     }
 }
@@ -58,61 +58,89 @@ void SimPage::read_trace_txt()
             lines->append(line);
             total++;
         }
-        lines->pop_back();
-        total--;
+        for (int i = 8; i > 0; i--) {
+            results.append(lines->at(lines->length()-i));
+        }
+        for (int var = 0; var < 8; ++var) {
+            lines->pop_back();
+            total--;
+        }
     }
 }
 
 void SimPage::simulate(int varr, int diff)
 {
-    int address = 0, x = 0, y = 0;
+    int address = 0;
 
     while(varr < diff)
     {
         if(lines->at(varr).split(" ").at(0) == "Main"){
             long m_address = lines->at(varr).split(" ").at(1).toLong();
-            ui->textBrowser->append("Main -> "+QString::number(m_address));
+            ui->textBrowser->append("Main -> "+QString::number(m_address) +" -> " + lines->at(varr).split(" ").at(4));
             m_address = (m_address % 1989);
-            x = (m_address%117) * 8 + 77;
-            y = ((int)m_address / 117) * 8 + 188;
-            points.append(QVector2D(x, y));
+            pointodesu po;
+            po.r = lines->at(varr).split(" ").at(5).toInt();
+            po.g = lines->at(varr).split(" ").at(6).toInt();
+            po.b = lines->at(varr).split(" ").at(7).toInt();
+            po.x = (m_address%117) * 8 + 77;
+            po.y = ((int)m_address / 117) * 8 + 188;
+            points.append(po);
         }
-
         else if (lines->at(varr).split(" ").at(0) == "L2"){
             address = lines->at(varr).split(" ").at(1).toInt();
-            ui->textBrowser->append("L2 -> "+QString::number(address));
-            x = (address % 117) * 8 + 77;
-            y = (address / 117) * 8 + 366;
-            points.append(QVector2D(x, y));
+            ui->textBrowser->append("L2 -> "+QString::number(address) +" -> " + lines->at(varr).split(" ").at(4));
+            pointodesu po;
+            po.r = lines->at(varr).split(" ").at(5).toInt();
+            po.g = lines->at(varr).split(" ").at(6).toInt();
+            po.b = lines->at(varr).split(" ").at(7).toInt();
+            po.x = (address % 117) * 8 + 77;
+            po.y = (address / 117) * 8 + 366;
+            points.append(po);
         }
         else{
             if( lines->at(varr).split(" ").at(3) == "0"){
                  address = lines->at(varr).split(" ").at(1).toInt();
-                 ui->textBrowser->append("Core_1-L1 -> "+QString::number(address));
-                 x = (address % 27) * 8 + 77;
-                 y = (address / 27) * 8 + 538;
-                 points.append(QVector2D(x, y));
+                 ui->textBrowser->append("Core_1-L1 -> "+QString::number(address) +" -> " + lines->at(varr).split(" ").at(4));
+                 pointodesu po;
+                 po.r = lines->at(varr).split(" ").at(5).toInt();
+                 po.g = lines->at(varr).split(" ").at(6).toInt();
+                 po.b = lines->at(varr).split(" ").at(7).toInt();
+                 po.x = (address % 27) * 8 + 77;
+                 po.y = (address / 27) * 8 + 538;
+                 points.append(po);
             }
             else if( lines->at(varr).split(" ").at(3) == "1"){
                  address = lines->at(varr).split(" ").at(1).toInt();
-                 ui->textBrowser->append("Core_2-L1 -> "+QString::number(address));
-                 x = (address % 28) * 8 + 307;
-                 y = (address / 28) * 8 + 537;
-                 points.append(QVector2D(x, y));
+                 ui->textBrowser->append("Core_2-L1 -> "+QString::number(address) +" -> " + lines->at(varr).split(" ").at(4));
+                 pointodesu po;
+                 po.r = lines->at(varr).split(" ").at(5).toInt();
+                 po.g = lines->at(varr).split(" ").at(6).toInt();
+                 po.b = lines->at(varr).split(" ").at(7).toInt();
+                 po.x = (address % 28) * 8 + 307;
+                 po.y = (address / 28) * 8 + 537;
+                 points.append(po);
             }
             else if( lines->at(varr).split(" ").at(3) == "2"){
                  address = lines->at(varr).split(" ").at(1).toInt();
-                 ui->textBrowser->append("Core_3-L1 -> "+QString::number(address));
-                 x = (address % 28) * 8 + 547;
-                 y = (address / 28) * 8 + 537;
-                 points.append(QVector2D(x, y));
+                 ui->textBrowser->append("Core_3-L1 -> "+QString::number(address) +" -> " + lines->at(varr).split(" ").at(4));
+                 pointodesu po;
+                 po.r = lines->at(varr).split(" ").at(5).toInt();
+                 po.g = lines->at(varr).split(" ").at(6).toInt();
+                 po.b = lines->at(varr).split(" ").at(7).toInt();
+                 po.x = (address % 28) * 8 + 547;
+                 po.y = (address / 28) * 8 + 537;
+                 points.append(po);
             }
             else{
                  address = lines->at(varr).split(" ").at(1).toInt();
-                 ui->textBrowser->append("Core_4-L1 -> "+QString::number(address));
-                 x = (address % 28) * 8 + 787;
-                 y = (address / 28) * 8 + 537;
-                 points.append(QVector2D(x, y));
+                 ui->textBrowser->append("Core_4-L1 -> "+QString::number(address) + " -> " + lines->at(varr).split(" ").at(4));
+                 pointodesu po;
+                 po.r = lines->at(varr).split(" ").at(5).toInt();
+                 po.g = lines->at(varr).split(" ").at(6).toInt();
+                 po.b = lines->at(varr).split(" ").at(7).toInt();
+                 po.x = (address % 28) * 8 + 787;
+                 po.y = (address / 28) * 8 + 537;
+                 points.append(po);
             }
         }
         varr++;
@@ -131,6 +159,10 @@ void SimPage::on_next_clicked()
         ui->textBrowser->setTextColor(Qt::red);
         ui->textBrowser->append("INSTRUCTIONS FINISHED.");
         ui->textBrowser->setTextColor(Qt::black);
+        ui->textBrowser->append(" ");
+        for (int var = 0; var < 8; ++var) {
+            ui->textBrowser->append(results.at(var));
+        }
         flag = false;
     }
 
@@ -151,6 +183,10 @@ void SimPage::on_finish_clicked()
         ui->textBrowser->setTextColor(Qt::red);
         ui->textBrowser->append("INSTRUCTIONS FINISHED.");
         ui->textBrowser->setTextColor(Qt::black);
+        ui->textBrowser->append(" ");
+        for (int var = 0; var < 8; ++var) {
+            ui->textBrowser->append(results.at(var));
+        }
     }
 }
 
